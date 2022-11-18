@@ -7,10 +7,10 @@ import fileio.CardInput;
 
 import java.util.ArrayList;
 
-public class Player {
+public final class Player {
 
     private ArrayList<Cards> deck = new ArrayList<>();
-    private ArrayList<Cards> CardsInHand = new ArrayList<>();
+    private ArrayList<Cards> cardsInHand = new ArrayList<>();
     private Hero hero;
     private int mana;
     private int backRow;
@@ -26,10 +26,10 @@ public class Player {
     }
 
     public ArrayList<Cards> getCardsInHand() {
-        return this.CardsInHand;
+        return this.cardsInHand;
     }
 
-    public Hero getHero(){
+    public Hero getHero() {
         return this.hero;
     }
 
@@ -46,13 +46,21 @@ public class Player {
     }
 
     //seters
-    public void setRows(int frontRow, int backRow) {
+
+    /**
+     * @param frontRow
+     * @param backRow
+     */
+    public void setRows(final int frontRow, final int backRow) {
         this.backRow = backRow;
         this.frontRow = frontRow;
     }
 
+    /**
+     * @param hero
+     */
     //setters
-    public void setHero(CardInput hero) {
+    public void setHero(final CardInput hero) {
         int mana = hero.getMana();
         String description = hero.getDescription();
         ArrayList<String> colors = hero.getColors();
@@ -60,26 +68,52 @@ public class Player {
         this.hero = new Hero(mana, description, colors, name);
     }
 
-    public void setMana(int mana) {
+    public void setMana(final int mana) {
         this.mana = mana;
     }
 
-    public void changeMana(Cards card) {
+    /**
+     * @param card
+     */
+    public void changeMana(final Cards card) {
         this.mana = this.mana - card.getMana();
     }
-    public void changeMana(Hero hero) {this.mana = this.mana - hero.getMana(); }
-    public void changeMana(int mana) {this.mana = this.mana + mana; }
+
+    /**
+     * @param hero
+     */
+    public void changeMana(final Hero hero) {
+        this.mana = this.mana - hero.getMana();
+    }
+
+    /**
+     * @param mana
+     */
+    public void changeMana(final int mana) {
+        this.mana = this.mana + mana;
+    }
 
 
     // action methods
+
+    /**
+     */
     public void addCardInHand() {
         if (this.deck.size() != 0) {
-            this.CardsInHand.add(this.deck.get(0));
+            this.cardsInHand.add(this.deck.get(0));
             this.deck.remove(0);
         }
     }
 
-    public ObjectNode command(ObjectMapper mapper, String command, int playerIdk) {
+    /**
+     * @param mapper
+     * @param command
+     * @param playerIdk
+     * @return
+     */
+    public ObjectNode command(final ObjectMapper mapper,
+                              final String command,
+                              final int playerIdk) {
         ObjectNode outputNode = mapper.createObjectNode();
         outputNode.put("command", command);
         outputNode.put("playerIdx", playerIdk);
@@ -89,38 +123,50 @@ public class Player {
             case "getCardsInHand" -> {
                 ArrayList<ObjectNode> nodes = new ArrayList<>();
                 int i = 0;
-                for (Cards hand : this.CardsInHand) {
+                for (Cards hand : this.cardsInHand) {
                     ObjectNode cards = mapper.createObjectNode();
                     nodes.add(cards);
                     switch (hand.getName()) {
-                        case "Sentinel", "Berserker", "Goliath", "Warden", "The Ripper", "Miraj", "The Cursed One", "Disciple" -> {
-                            Cards minion = this.CardsInHand.get(i);
+                        case "Sentinel":
+                        case "Berserker":
+                        case "Goliath":
+                        case "Warden":
+                        case "The Ripper":
+                        case "Miraj":
+                        case "The Cursed One":
+                        case "Disciple":
+                            Cards minion = this.cardsInHand.get(i);
                             nodes.get(i).put("mana", minion.getMana());
                             nodes.get(i).put("attackDamage", minion.getAttackDamage());
                             nodes.get(i).put("health", minion.getHealth());
                             nodes.get(i).put("description", minion.getDescription());
                             ArrayNode colors = mapper.createArrayNode();
-                            for (String color : minion.getColors())
+                            for (String color : minion.getColors()) {
                                 colors.add(color);
+                            }
                             nodes.get(i).set("colors", colors);
                             nodes.get(i).put("name", minion.getName());
                             output.add(nodes.get(i));
                             i++;
                             break;
-                        }
-                        case "Firestorm", "Winterfell", "Heart Hound" -> {
-                            Cards environment = this.CardsInHand.get(i);
+
+                        case "Firestorm":
+                        case "Winterfell":
+                        case "Heart Hound":
+                            Cards environment = this.cardsInHand.get(i);
                             nodes.get(i).put("mana", environment.getMana());
                             nodes.get(i).put("description", environment.getDescription());
-                            ArrayNode colors = mapper.createArrayNode();
-                            for (String color : environment.getColors())
+                            colors = mapper.createArrayNode();
+                            for (String color : environment.getColors()) {
                                 colors.add(color);
+                            }
                             nodes.get(i).set("colors", colors);
                             nodes.get(i).put("name", environment.getName());
                             output.add(nodes.get(i));
                             i++;
                             break;
-                        }
+
+                        default: break;
                     }
                     // cards.removeAll();
                 }
@@ -133,32 +179,44 @@ public class Player {
                     ObjectNode cards = mapper.createObjectNode();
                     nodes.add(cards);
                     switch (this.deck.get(i).getName()) {
-                        case "Sentinel", "Berserker", "Goliath", "Warden", "The Ripper", "Miraj", "The Cursed One", "Disciple" -> {
+                        case "Sentinel":
+                        case "Berserker":
+                        case "Goliath":
+                        case "Warden":
+                        case "The Ripper":
+                        case "Miraj":
+                        case "The Cursed One":
+                        case "Disciple":
                             Cards minion = this.deck.get(i);
                             nodes.get(i).put("mana", minion.getMana());
                             nodes.get(i).put("attackDamage", minion.getAttackDamage());
                             nodes.get(i).put("health", minion.getHealth());
                             nodes.get(i).put("description", minion.getDescription());
                             ArrayNode colors = mapper.createArrayNode();
-                            for (String color : minion.getColors())
+                            for (String color : minion.getColors()) {
                                 colors.add(color);
+                            }
                             nodes.get(i).set("colors", colors);
                             nodes.get(i).put("name", minion.getName());
                             output.add(nodes.get(i));
                             break;
-                        }
-                        case "Firestorm", "Winterfell", "Heart Hound" -> {
+
+                        case "Firestorm":
+                        case "Winterfell":
+                        case "Heart Hound":
                             Cards environment = this.deck.get(i);
                             nodes.get(i).put("mana", environment.getMana());
                             nodes.get(i).put("description", environment.getDescription());
-                            ArrayNode colors = mapper.createArrayNode();
-                            for (String color : environment.getColors())
+                            colors = mapper.createArrayNode();
+                            for (String color : environment.getColors()) {
                                 colors.add(color);
+                            }
                             nodes.get(i).set("colors", colors);
                             nodes.get(i).put("name", environment.getName());
                             output.add(nodes.get(i));
                             break;
-                        }
+
+                        default: break;
                     }
                     //cards.removeAll();
                 }
@@ -170,8 +228,9 @@ public class Player {
                 myHero.put("mana", this.hero.getMana());
                 myHero.put("description", this.hero.getDescription());
                 ArrayNode colors = mapper.createArrayNode();
-                for (String color : hero.getColors())
+                for (String color : hero.getColors()) {
                     colors.add(color);
+                }
                 myHero.set("colors", colors);
                 myHero.put("name", this.hero.getName());
                 myHero.put("health", this.hero.getHealth());
@@ -186,30 +245,32 @@ public class Player {
             case "getEnvironmentCardsInHand" -> {
                 ArrayList<ObjectNode> nodes = new ArrayList<>();
                 int counter = 0;
-                for (int i = 0; i < this.CardsInHand.size(); i++) {
+                for (int i = 0; i < this.cardsInHand.size(); i++) {
                     ObjectNode cards = mapper.createObjectNode();
                     nodes.add(cards);
-                    switch (this.CardsInHand.get(i).getName()) {
-                        case "Sentinel", "Berserker", "Goliath", "Warden", "The Ripper", "Miraj", "The Cursed One", "Disciple" -> {
-                            break;
-                        }
+                    switch (this.cardsInHand.get(i).getName()) {
                         case "Firestorm", "Winterfell", "Heart Hound" -> {
-                            Cards environment = this.CardsInHand.get(i);
+                            Cards environment = this.cardsInHand.get(i);
                             nodes.get(counter).put("mana", environment.getMana());
                             nodes.get(counter).put("description", environment.getDescription());
                             ArrayNode colors = mapper.createArrayNode();
-                            for (String color : environment.getColors())
+                            for (String color : environment.getColors()) {
                                 colors.add(color);
+                            }
                             nodes.get(counter).set("colors", colors);
                             nodes.get(counter).put("name", environment.getName());
                             output.add(nodes.get(counter));
                             counter++;
                             break;
                         }
+                        default -> {
+                        }
                     }
                 }
                 outputNode.set("output", output);
                 break;
+            }
+            default -> {
             }
         }
         return outputNode;

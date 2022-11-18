@@ -88,7 +88,7 @@ public final class Main {
 
             Player player1 = new Player();
             Player player2 = new Player();
-            player1.setRows(2,3);
+            player1.setRows(2, 2 + 1);
             player2.setRows(1, 0);
 
             GameTable gameTable = new GameTable();
@@ -98,9 +98,17 @@ public final class Main {
             Deck deck = new Deck();
 
             // the players choose a deck
-            ArrayList<CardInput> copy = inputData.getPlayerOneDecks().getDecks().get(startGameInput.getPlayerOneDeckIdx());
+            ArrayList<CardInput> copy = inputData
+                    .getPlayerOneDecks()
+                    .getDecks()
+                    .get(startGameInput
+                            .getPlayerOneDeckIdx());
             ArrayList<CardInput> my1Deck = deck.chooseDeck(copy);
-            copy = inputData.getPlayerTwoDecks().getDecks().get(startGameInput.getPlayerTwoDeckIdx());
+            copy = inputData
+                    .getPlayerTwoDecks()
+                    .getDecks()
+                    .get(startGameInput
+                            .getPlayerTwoDeckIdx());
             ArrayList<CardInput> my2Deck = deck.chooseDeck(copy);
 
 
@@ -132,6 +140,8 @@ public final class Main {
 
             ArrayList<ObjectNode> objectNode = new ArrayList<>();
             int i = 0;
+            final int maxMana = 10;
+            final int three = 3;
 
             for (ActionsInput action : gameInput.getActions()) {
 
@@ -140,12 +150,12 @@ public final class Main {
                     player2.addCardInHand();
                     player1.addCardInHand();
 
-                    if (counterMana <= 10) {
+                    if (counterMana <= maxMana) {
                         player1.changeMana(counterMana);
                         player2.changeMana(counterMana);
                         counterMana++;
                     }
-                    newRound ++;
+                    newRound++;
                 }
                 switch (action.getCommand()) {
 
@@ -153,60 +163,65 @@ public final class Main {
                     case "getCardsInHand" :
                     case "getPlayerDeck" :
                     case "getEnvironmentCardsInHand" :
-                    case "getPlayerHero" : {
+                    case "getPlayerHero" :
                         ObjectNode object = objectMapper.createObjectNode();
                         objectNode.add(object);
-                        if (action.getPlayerIdx() == 1)
-                            objectNode.set(i, player1.command(objectMapper, action.getCommand(), 1));
-                        else
-                            objectNode.set(i, player2.command(objectMapper, action.getCommand(), 2));
+                        if (action.getPlayerIdx() == 1) {
+                            objectNode.set(i,
+                                    player1.command(objectMapper, action.getCommand(), 1));
+                        } else {
+                            objectNode.set(i,
+                                    player2.command(objectMapper, action.getCommand(), 2));
+                        }
                         output.add(objectNode.get(i));
                         i++;
                         break;
-                    }
-                    case "getCardsOnTable" : {
-                        ObjectNode object = objectMapper.createObjectNode();
+
+                    case "getCardsOnTable" :
+                        object = objectMapper.createObjectNode();
                         objectNode.add(object);
                         objectNode.set(i, gameTable.getCardsOnTable(objectMapper));
                         output.add(objectNode.get(i));
                         i++;
                         break;
-                    }
-                    case "getPlayerTurn" : {
-                        ObjectNode object = objectMapper.createObjectNode();
+
+                    case "getPlayerTurn" :
+                        object = objectMapper.createObjectNode();
                         objectNode.add(object);
                         objectNode.get(i).put("command", action.getCommand());
                         objectNode.get(i).put("output", gameTable.getCurrentPlayer());
                         output.add(objectNode.get(i));
                         i++;
                         break;
-                    }
-                    case "getCardAtPosition" : {
+
+                    case "getCardAtPosition" :
                         String string = gameTable.getCardAtPosition(action.getX(), action.getY());
-                        if(string.equals("succes")) {
-                            ObjectNode object = objectMapper.createObjectNode();
+                        if (string.equals("succes")) {
+                            object = objectMapper.createObjectNode();
                             objectNode.add(object);
                             objectNode.get(i).put("command", action.getCommand());
                             objectNode.get(i).put("x", action.getX());
                             objectNode.get(i).put("y", action.getY());
                             ObjectNode myCard = objectMapper.createObjectNode();
-                            Cards copy_card = gameTable.getRows().get(action.getX()).get(action.getY());
-                            myCard.put("mana", copy_card.getMana());
-                            myCard.put("attackDamage", copy_card.getAttackDamage());
-                            myCard.put("health", copy_card.getHealth());
-                            myCard.put("description", copy_card.getDescription());
+                            Cards copyCard = gameTable.getRows()
+                                    .get(action.getX())
+                                    .get(action.getY());
+                            myCard.put("mana", copyCard.getMana());
+                            myCard.put("attackDamage", copyCard.getAttackDamage());
+                            myCard.put("health", copyCard.getHealth());
+                            myCard.put("description", copyCard.getDescription());
                             ArrayNode colors = objectMapper.createArrayNode();
-                            for(String color : copy_card.getColors())
+                            for (String color : copyCard.getColors()) {
                                 colors.add(color);
+                            }
                             myCard.set("colors", colors);
-                            myCard.put("name", copy_card.getName());
+                            myCard.put("name", copyCard.getName());
 
                             objectNode.get(i).set("output", myCard);
                             output.add(objectNode.get(i));
                             i++;
-                        }
-                        else {
-                            ObjectNode object = objectMapper.createObjectNode();
+                        } else {
+                            object = objectMapper.createObjectNode();
                             objectNode.add(object);
                             objectNode.get(i).put("command", action.getCommand());
                             objectNode.get(i).put("x", action.getX());
@@ -216,95 +231,122 @@ public final class Main {
                             i++;
                         }
                         break;
-                    }
-                    case "getPlayerMana" : {
-                        ObjectNode object = objectMapper.createObjectNode();
+
+                    case "getPlayerMana" :
+                        object = objectMapper.createObjectNode();
                         objectNode.add(object);
                         objectNode.get(i).put("command", "getPlayerMana");
                         objectNode.get(i).put("playerIdx", action.getPlayerIdx());
-                        if(action.getPlayerIdx() == 1)
+                        if (action.getPlayerIdx() == 1) {
                             objectNode.get(i).put("output", player1.getMana());
-                        else objectNode.get(i).put("output", player2.getMana());
+                        } else {
+                            objectNode.get(i).put("output", player2.getMana());
+                        }
                         output.add(objectNode.get(i));
                         i++;
                         break;
-                    }
-                    case "getFrozenCardsOnTable" : {
-                        ObjectNode object = objectMapper.createObjectNode();
+
+                    case "getFrozenCardsOnTable" :
+                        object = objectMapper.createObjectNode();
                         objectNode.add(object);
                         objectNode.set(i, gameTable.getFrozenCardsOnTable(objectMapper));
                         output.add(objectNode.get(i));
                         i++;
                         break;
-                    }
+
 
                     //commands for statistics
-                    case "getTotalGamesPlayed" : {
-                        ObjectNode object = objectMapper.createObjectNode();
+                    case "getTotalGamesPlayed" :
+                        object = objectMapper.createObjectNode();
                         objectNode.add(object);
                         objectNode.get(i).put("command", action.getCommand());
                         objectNode.get(i).put("output", gamesPlayed);
                         output.add(objectNode.get(i));
                         i++;
                         break;
-                    }
-                    case "getPlayerOneWins" : {
-                        ObjectNode object = objectMapper.createObjectNode();
+
+                    case "getPlayerOneWins" :
+                        object = objectMapper.createObjectNode();
                         objectNode.add(object);
                         objectNode.get(i).put("command", action.getCommand());
                         objectNode.get(i).put("output", player1Wins);
                         output.add(objectNode.get(i));
                         i++;
                         break;
-                    }
-                    case "getPlayerTwoWins" : {
-                        ObjectNode object = objectMapper.createObjectNode();
+
+                    case "getPlayerTwoWins" :
+                        object = objectMapper.createObjectNode();
                         objectNode.add(object);
                         objectNode.get(i).put("command", action.getCommand());
                         objectNode.get(i).put("output", player2Wins);
                         output.add(objectNode.get(i));
                         i++;
                         break;
-                    }
+
 
                     //commands for actions
-                    case "endPlayerTurn" : {
-                        if (gameTable.getCurrentPlayer() == 1)
+                    case "endPlayerTurn" :
+                        if (gameTable.getCurrentPlayer() == 1) {
                             gameTable.unfrozeCards(player1);
-                        else gameTable.unfrozeCards(player2);
+                        } else {
+                            gameTable.unfrozeCards(player2);
+                        }
 
-                        if(gameTable.getCurrentPlayer() == 1)
+                        if (gameTable.getCurrentPlayer() == 1) {
                             gameTable.unuseCards(player1);
-                        else gameTable.unuseCards(player2);
+                        } else {
+                            gameTable.unuseCards(player2);
+                        }
 
                         player1.getHero().setUsed(false);
                         player2.getHero().setUsed(false);
 
-                        newRound ++;
-                        if(newRound == 3)
+                        newRound++;
+                        if (newRound == three) {
                             newRound = 0;
+                        }
                         gameTable.changeCurrentPlayer(gameTable.getCurrentPlayer());
                         break;
-                    }
-                    case "placeCard" : {
+
+                    case "placeCard" :
                         if (gameTable.getCurrentPlayer() == 1) {
-                            if (player1.getCardsInHand().size() > 0 && action.getHandIdx() < player1.getCardsInHand().size()) {
-                                String string;
-                                string = gameTable.placeCardOnTable(player1.getCardsInHand().get(action.getHandIdx()), player1);
-                                if (string.equals("error_environment") || string.equals("error_mana") || string.equals("error_not_enough_space")) {
-                                    ObjectNode o = error.errorPlaceCard(action.getCommand(), action.getHandIdx(), string, objectMapper);
+                            if (player1.getCardsInHand().size() > 0
+                                    && action.getHandIdx() < player1.getCardsInHand().size()) {
+                                String string1;
+                                string1 = gameTable.placeCardOnTable(
+                                        player1
+                                                .getCardsInHand()
+                                                .get(action.getHandIdx()),
+                                        player1);
+                                if (string1.equals("error_environment")
+                                        || string1.equals("error_mana")
+                                        || string1.equals("error_not_enough_space")) {
+                                    ObjectNode o = error.errorPlaceCard(action.getCommand(),
+                                            action.getHandIdx(),
+                                            string1,
+                                            objectMapper);
                                     objectNode.add(o);
                                     output.add(objectNode.get(i));
                                     i++;
                                 }
                             }
-                        }
-                        else {
-                            if (player2.getCardsInHand().size() > 0 && action.getHandIdx() < player2.getCardsInHand().size()) {
-                                String string;
-                                string = gameTable.placeCardOnTable(player2.getCardsInHand().get(action.getHandIdx()), player2);
-                                if (string.equals("error_environment") || string.equals("error_mana") || string.equals("error_not_enough_space")) {
-                                    ObjectNode o = error.errorPlaceCard(action.getCommand(), action.getHandIdx(), string, objectMapper);
+                        } else {
+                            if (player2.getCardsInHand().size() > 0
+                                    && action.getHandIdx() < player2.getCardsInHand().size()) {
+                                String string1;
+                                string1 = gameTable.placeCardOnTable(
+                                        player2
+                                                .getCardsInHand()
+                                                .get(action.getHandIdx()),
+                                        player2);
+                                if (string1.equals("error_environment")
+                                        || string1.equals("error_mana")
+                                        || string1.equals("error_not_enough_space")) {
+                                    ObjectNode o = error.errorPlaceCard(
+                                            action.getCommand(),
+                                            action.getHandIdx(),
+                                            string1,
+                                            objectMapper);
                                     objectNode.add(o);
                                     output.add(objectNode.get(i));
                                     i++;
@@ -312,76 +354,117 @@ public final class Main {
                             }
                         }
                         break;
-                    }
-                    case "cardUsesAttack" : {
-                        String string;
-                        int x_attacker = action.getCardAttacker().getX();
-                        int y_attacker = action.getCardAttacker().getY();
-                        int x_attacked = action.getCardAttacked().getX();
-                        int y_attacked = action.getCardAttacked().getY();
 
-                        if(gameTable.getCurrentPlayer() == 1)
-                            string = gameTable.CardUsesAttack(player1, player2, x_attacker, y_attacker, x_attacked, y_attacked);
-                        else
-                            string = gameTable.CardUsesAttack(player2, player1, x_attacker, y_attacker, x_attacked, y_attacked);
-                        if(!string.equals("succes")) {
+                    case "cardUsesAttack" :
+                        String string1;
+                        int xAttacker = action.getCardAttacker().getX();
+                        int yAttacker = action.getCardAttacker().getY();
+                        int xAttacked = action.getCardAttacked().getX();
+                        int yAttacked = action.getCardAttacked().getY();
+
+                        if (gameTable.getCurrentPlayer() == 1) {
+                            string1 = gameTable.cardUsesAttack(
+                                    player1,
+                                    player2,
+                                    xAttacker,
+                                    yAttacker,
+                                    xAttacked,
+                                    yAttacked);
+                        } else {
+                            string1 = gameTable.cardUsesAttack(
+                                    player2,
+                                    player1,
+                                    xAttacker,
+                                    yAttacker,
+                                    xAttacked,
+                                    yAttacked);
+                        }
+                        if (!string1.equals("succes")) {
                             String command = action.getCommand();
-                            objectNode.add(error.errorCardUsesAttack(command, x_attacker, y_attacker, x_attacked, y_attacked, string, objectMapper));
+                            objectNode.add(error.errorCardUsesAttack(
+                                    command,
+                                    xAttacker,
+                                    yAttacker,
+                                    xAttacked,
+                                    yAttacked,
+                                    string1,
+                                    objectMapper));
                             output.add(objectNode.get(i));
                             i++;
                         }
                         break;
-                    }
-                    case "cardUsesAbility" : {
 
-                        int x_attacker = action.getCardAttacker().getX();
-                        int y_attacker = action.getCardAttacker().getY();
-                        int x_attacked = action.getCardAttacked().getX();
-                        int y_attacked = action.getCardAttacked().getY();
+                    case "cardUsesAbility" :
 
-                        if(y_attacker < gameTable.getRows().get(x_attacker).size() && y_attacked < gameTable.getRows().get(x_attacked).size()) {
-                            String string;
-                            Cards cardAttacker = gameTable.getRows().get(x_attacker).get(y_attacker);
-                            Cards cardAttacked = gameTable.getRows().get(x_attacked).get(y_attacked);
+                        xAttacker = action.getCardAttacker().getX();
+                        yAttacker = action.getCardAttacker().getY();
+                        xAttacked = action.getCardAttacked().getX();
+                        yAttacked = action.getCardAttacked().getY();
 
-                            if (gameTable.getCurrentPlayer() == 1)
-                                string = gameTable.cardUsesAbility(player1, player2, cardAttacker, cardAttacked);
-                            else
-                                string = gameTable.cardUsesAbility(player2, player1, cardAttacker, cardAttacked);
-                            if (!string.equals("succes")) {
+                        if (yAttacker < gameTable.getRows().get(xAttacker).size()
+                                && yAttacked < gameTable.getRows().get(xAttacked).size()) {
+                            String string2;
+                            Cards cardAttacker = gameTable.getRows().get(xAttacker).get(yAttacker);
+                            Cards cardAttacked = gameTable.getRows().get(xAttacked).get(yAttacked);
+
+                            if (gameTable.getCurrentPlayer() == 1) {
+                                string2 = gameTable.cardUsesAbility(player1,
+                                        player2,
+                                        cardAttacker,
+                                        cardAttacked);
+                            } else {
+                                string2 = gameTable.cardUsesAbility(player2,
+                                        player1,
+                                        cardAttacker,
+                                        cardAttacked);
+                            }
+                            if (!string2.equals("succes")) {
                                 String command = action.getCommand();
-                                objectNode.add(error.errorCardUsesAbility(command, x_attacker, y_attacker, x_attacked, y_attacked, string, objectMapper));
+                                objectNode.add(error.errorCardUsesAbility(command,
+                                        xAttacker,
+                                        yAttacker,
+                                        xAttacked,
+                                        yAttacked,
+                                        string2,
+                                        objectMapper));
                                 output.add(objectNode.get(i));
                                 i++;
                             }
                         }
                         break;
-                    }
-                    case "useAttackHero" : {
-                        int x_attacker = action.getCardAttacker().getX();
-                        int y_attacker = action.getCardAttacker().getY();
-                        if(y_attacker < gameTable.getRows().get(x_attacker).size()) {
-                            String string;
-                            Cards card = gameTable.getRows().get(x_attacker).get(y_attacker);
-                            if(gameTable.getCurrentPlayer() == 1) {
-                                string = gameTable.cardAttackHero(player1, player2, card, player2.getHero());
-                                if (string.equals("victory")) {
+
+                    case "useAttackHero" :
+                        xAttacker = action.getCardAttacker().getX();
+                        yAttacker = action.getCardAttacker().getY();
+                        if (yAttacker < gameTable.getRows().get(xAttacker).size()) {
+                            String string2;
+                            Cards card = gameTable.getRows().get(xAttacker).get(yAttacker);
+                            if (gameTable.getCurrentPlayer() == 1) {
+                                string2 = gameTable.cardAttackHero(
+                                        player1,
+                                        player2,
+                                        card,
+                                        player2.getHero());
+                                if (string2.equals("victory")) {
                                     ObjectNode node = objectMapper.createObjectNode();
                                     node.put("gameEnded", "Player one killed the enemy hero.");
-                                    gamesPlayed ++;
+                                    gamesPlayed++;
                                     player1Wins++;
                                     objectNode.add(node);
                                     output.add(objectNode.get(i));
                                     i++;
                                     break;
                                 }
-                            }
-                            else {
-                                string = gameTable.cardAttackHero(player2, player1, card, player1.getHero());
-                                if (string.equals("victory")) {
+                            } else {
+                                string2 = gameTable.cardAttackHero(
+                                        player2,
+                                        player1,
+                                        card,
+                                        player1.getHero());
+                                if (string2.equals("victory")) {
                                     ObjectNode node = objectMapper.createObjectNode();
                                     node.put("gameEnded", "Player two killed the enemy hero.");
-                                    gamesPlayed ++;
+                                    gamesPlayed++;
                                     objectNode.add(node);
                                     player2Wins++;
                                     output.add(objectNode.get(i));
@@ -389,56 +472,92 @@ public final class Main {
                                     break;
                                 }
                             }
-                            if(!string.equals("succes")) {
+                            if (!string2.equals("succes")) {
                                 String command = action.getCommand();
-                                objectNode.add(error.errorAttackHero(action.getCommand(), x_attacker, y_attacker, string, objectMapper));
+                                objectNode.add(error.errorAttackHero(
+                                        action.getCommand(),
+                                                xAttacker,
+                                                yAttacker,
+                                                string2,
+                                                objectMapper));
                                 output.add(objectNode.get(i));
                                 i++;
                             }
                         }
                         break;
-                    }
-                    case "useHeroAbility" : {
+
+                    case "useHeroAbility" :
                         int affectedRow = action.getAffectedRow();
-                        String string;
-                        if (gameTable.getCurrentPlayer() == 1)
-                            string = gameTable.heroUseAbility(affectedRow, player1.getHero(), player1);
-                        else string = gameTable.heroUseAbility(affectedRow, player2.getHero(), player2);
-                        if(!string.equals("succes")) {
+                        String string2;
+                        if (gameTable.getCurrentPlayer() == 1) {
+                            string2 = gameTable.heroUseAbility(
+                                    affectedRow,
+                                    player1.getHero(),
+                                    player1);
+                        } else {
+                            string2 = gameTable.heroUseAbility(
+                                    affectedRow,
+                                    player2.getHero(),
+                                    player2);
+                        }
+                        if (!string2.equals("succes")) {
                             String command = action.getCommand();
-                            objectNode.add(error.errorHeroAttack(action.getCommand(), action.getAffectedRow(), string, objectMapper));
+                            objectNode.add(error.errorHeroAttack(
+                                    action.getCommand(),
+                                    action.getAffectedRow(),
+                                    string2,
+                                    objectMapper));
                             output.add(objectNode.get(i));
                             i++;
                         }
                         break;
-                    }
-                    case "useEnvironmentCard" : {
-                        if(gameTable.getCurrentPlayer() == 1) {
-                            if (player1.getCardsInHand().size() <= action.getHandIdx())
+
+                    case "useEnvironmentCard" :
+                        if (gameTable.getCurrentPlayer() == 1) {
+                            if (player1.getCardsInHand().size() <= action.getHandIdx()) {
                                 break;
-                        }
-                        else if(gameTable.getCurrentPlayer() == 2) {
-                            if (player2.getCardsInHand().size() <= action.getHandIdx())
+                            }
+                        } else if (gameTable.getCurrentPlayer() == 2) {
+                            if (player2.getCardsInHand().size() <= action.getHandIdx()) {
                                 break;
+                            }
                         }
 
                         Cards card;
-                        if(gameTable.getCurrentPlayer() == 1)
+                        if (gameTable.getCurrentPlayer() == 1) {
                             card = player1.getCardsInHand().get(action.getHandIdx());
-                        else card = player2.getCardsInHand().get(action.getHandIdx());
+                        } else  {
+                            card = player2.getCardsInHand().get(action.getHandIdx());
+                        }
 
-                        String string;
-                        if(gameTable.getCurrentPlayer() == 1)
-                            string = gameTable.cardUsesEffect(player1, player2, card, action.getAffectedRow());
-                        else string = gameTable.cardUsesEffect(player2, player1, card, action.getAffectedRow());
-                        if(!string.equals("succes")) {
+                        String string3;
+                        if (gameTable.getCurrentPlayer() == 1) {
+                            string3 = gameTable.cardUsesEffect(
+                                    player1,
+                                    player2,
+                                    card,
+                                    action.getAffectedRow());
+                        } else {
+                            string3 = gameTable.cardUsesEffect(
+                                    player2,
+                                    player1,
+                                    card,
+                                    action.getAffectedRow());
+                        }
+                        if (!string3.equals("succes")) {
                             String command = action.getCommand();
-                            objectNode.add(error.errorUsesEnvironmentCard(command, action.getHandIdx(), action.getAffectedRow(), string, objectMapper));
+                            objectNode.add(error.errorUsesEnvironmentCard(
+                                    command,
+                                    action.getHandIdx(),
+                                    action.getAffectedRow(),
+                                    string3,
+                                    objectMapper));
                             output.add(objectNode.get(i));
                             i++;
                         }
                         break;
-                    }
+
+                    default: break;
                 }
             }
 

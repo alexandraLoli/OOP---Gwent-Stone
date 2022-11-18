@@ -3,45 +3,88 @@ package main;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-public class Error {
+public final class Error {
 
-    UsefulClass usefulClass = new UsefulClass();
-    public ObjectNode errorPlaceCard(String command, int handIdx, String error, ObjectMapper mapper) {
+    private UsefulClass usefulClass = new UsefulClass();
+
+    public UsefulClass getUsefulClass() {
+        return this.usefulClass;
+    }
+
+    /**
+     * @param command
+     * @param handIdx
+     * @param error
+     * @param mapper
+     * @return
+     */
+    public ObjectNode errorPlaceCard(final String command,
+                                     final int handIdx,
+                                     final String error,
+                                     final ObjectMapper mapper) {
         ObjectNode objectNode = mapper.createObjectNode();
-        String error_text = this.usefulClass.generateString(error);
+        String errorText = this.usefulClass.generateString(error);
 
         objectNode.put("command", command);
 
         objectNode.put("handIdx", handIdx);
 
-        objectNode.put("error", error_text);
+        objectNode.put("error", errorText);
         return objectNode;
     }
 
-    public ObjectNode errorCardUsesAttack(String command, int x_er, int y_er, int x_ed, int y_ed, String  error, ObjectMapper mapper) {
+    /**
+     * @param command
+     * @param xEr
+     * @param yEr
+     * @param xEd
+     * @param yEd
+     * @param error
+     * @param mapper
+     * @return
+     */
+    public ObjectNode errorCardUsesAttack(final String command,
+                                          final int xEr,
+                                          final int yEr,
+                                          final int xEd,
+                                          final int yEd,
+                                          final String  error,
+                                          final ObjectMapper mapper) {
         ObjectNode objectNode = mapper.createObjectNode();
-        String error_text = this.usefulClass.generateString(error);
+        String errorText = this.usefulClass.generateString(error);
 
         objectNode.put("command", command);
 
         ObjectNode attacker = mapper.createObjectNode();
-        attacker.put("x", x_er);
-        attacker.put("y", y_er);
+        attacker.put("x", xEr);
+        attacker.put("y", yEr);
         objectNode.set("cardAttacker", attacker);
 
         ObjectNode attacked = mapper.createObjectNode();
-        attacked.put("x", x_ed);
-        attacked.put("y", y_ed);
+        attacked.put("x", xEd);
+        attacked.put("y", yEd);
         objectNode.set("cardAttacked", attacked);
 
-        objectNode.put("error", error_text);
+        objectNode.put("error", errorText);
 
         return objectNode;
     }
 
-    public ObjectNode errorUsesEnvironmentCard(String command, int idx, int row, String error, ObjectMapper mapper) {
+    /**
+     * @param command
+     * @param idx
+     * @param row
+     * @param error
+     * @param mapper
+     * @return
+     */
+    public ObjectNode errorUsesEnvironmentCard(final String command,
+                                               final int idx,
+                                               final int row,
+                                               final String error,
+                                               final ObjectMapper mapper) {
         ObjectNode objectNode = mapper.createObjectNode();
-        String error_text = this.usefulClass.generateString(error);
+        String errorText = this.usefulClass.generateString(error);
 
         objectNode.put("command", command);
 
@@ -49,54 +92,93 @@ public class Error {
 
         objectNode.put("affectedRow", row);
 
-        objectNode.put("error", error_text);
+        objectNode.put("error", errorText);
 
         return objectNode;
     }
 
-    public ObjectNode errorCardUsesAbility(String command, int x_er, int y_er, int x_ed, int y_ed, String  error, ObjectMapper mapper) {
+    /**
+     * @param command
+     * @param xEr
+     * @param yEr
+     * @param xEd
+     * @param yEd
+     * @param error
+     * @param mapper
+     * @return
+     */
+    public ObjectNode errorCardUsesAbility(final String command,
+                                           final int xEr,
+                                           final int yEr,
+                                           final int xEd,
+                                           final int yEd,
+                                           final String  error,
+                                           final ObjectMapper mapper) {
         ObjectNode objectNode = mapper.createObjectNode();
-        String error_text = this.usefulClass.generateString(error);
+        String errorText = this.usefulClass.generateString(error);
 
         objectNode.put("command", command);
 
         ObjectNode attacker = mapper.createObjectNode();
-        attacker.put("x", x_er);
-        attacker.put("y", y_er);
+        attacker.put("x", xEr);
+        attacker.put("y", yEr);
         objectNode.set("cardAttacker", attacker);
 
         ObjectNode attacked = mapper.createObjectNode();
-        attacked.put("x", x_ed);
-        attacked.put("y", y_ed);
+        attacked.put("x", xEd);
+        attacked.put("y", yEd);
         objectNode.set("cardAttacked", attacked);
 
-        objectNode.put("error", error_text);
+        objectNode.put("error", errorText);
 
         return objectNode;
     }
 
-    public ObjectNode errorAttackHero(String command, int x_er, int y_er, String error, ObjectMapper mapper) {
+    /**
+     * @param command
+     * @param xEr
+     * @param yEr
+     * @param error
+     * @param mapper
+     * @return
+     */
+    public ObjectNode errorAttackHero(final String command,
+                                      final int xEr,
+                                      final int yEr,
+                                      final String error,
+                                      final ObjectMapper mapper) {
         ObjectNode objectNode = mapper.createObjectNode();
-        String error_text = this.usefulClass.generateString(error);
+        String errorText = this.usefulClass.generateString(error);
 
         objectNode.put("command", command);
 
         ObjectNode attacker = mapper.createObjectNode();
-        attacker.put("x", x_er);
-        attacker.put("y", y_er);
+        attacker.put("x", xEr);
+        attacker.put("y", yEr);
         objectNode.set("cardAttacker", attacker);
 
-        objectNode.put("error", error_text);
+        objectNode.put("error", errorText);
 
         return objectNode;
     }
-    public ObjectNode errorHeroAttack(String command, int row, String error, ObjectMapper mapper) {
+
+    /**
+     * @param command
+     * @param row
+     * @param error
+     * @param mapper
+     * @return
+     */
+    public ObjectNode errorHeroAttack(final String command,
+                                      final int row,
+                                      final String error,
+                                      final ObjectMapper mapper) {
         ObjectNode objectNode = mapper.createObjectNode();
-        String error_text = this.usefulClass.generateString(error);
+        String errorText = this.usefulClass.generateString(error);
 
         objectNode.put("command", command);
         objectNode.put("affectedRow", row);
-        objectNode.put("error", error_text);
+        objectNode.put("error", errorText);
 
         return objectNode;
     }

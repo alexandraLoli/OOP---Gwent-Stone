@@ -1,23 +1,39 @@
 package main;
 
 import fileio.CardInput;
-import fileio.DecksInput;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
-public class Deck {
+public final class Deck {
 
-    public ArrayList<CardInput> chooseDeck(ArrayList<CardInput> otherDeck) {
+    /**
+     * @param otherDeck
+     * @return
+     */
+    public @NotNull ArrayList<CardInput> chooseDeck(final @NotNull ArrayList<CardInput> otherDeck) {
         ArrayList<CardInput> myDeck = new ArrayList<>();
         for (CardInput cardInput : otherDeck) {
             myDeck.add(cardInput);
         }
         return myDeck;
     }
-    public void setDecks (Player player, ArrayList<CardInput> deck) {
+
+    /**
+     * @param player
+     * @param deck
+     */
+    public void setDecks(final Player player, final @NotNull ArrayList<CardInput> deck) {
         for (CardInput cardInput : deck) {
             switch (cardInput.getName()) {
-                case "Sentinel", "Berserker", "Goliath", "Warden", "The Ripper", "Miraj", "The Cursed One", "Disciple" -> {
+                case "Sentinel":
+                case "Berserker":
+                case "Goliath":
+                case "Warden":
+                case "The Ripper":
+                case "Miraj":
+                case "The Cursed One":
+                case "Disciple":
                     int mana = cardInput.getMana();
                     String description = cardInput.getDescription();
                     ArrayList<String> colors = cardInput.getColors();
@@ -26,15 +42,20 @@ public class Deck {
                     int health = cardInput.getHealth();
                     Cards minion = new Cards(mana, attackDamage, health, description, colors, name);
                     player.getDeck().add(minion);
-                }
-                case "Firestorm", "Winterfell", "Heart Hound" -> {
-                    int mana = cardInput.getMana();
-                    String description = cardInput.getDescription();
-                    ArrayList<String> colors = cardInput.getColors();
-                    String name = cardInput.getName();
+                    break;
+
+                case "Firestorm":
+                case "Winterfell":
+                case "Heart Hound":
+                    mana = cardInput.getMana();
+                    description = cardInput.getDescription();
+                    colors = cardInput.getColors();
+                    name = cardInput.getName();
                     Cards environment = new Cards(mana, description, colors, name);
                     player.getDeck().add(environment);
-                }
+                    break;
+
+                default: break;
             }
         }
     }

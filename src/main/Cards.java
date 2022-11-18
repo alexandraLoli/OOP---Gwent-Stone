@@ -1,29 +1,43 @@
 package main;
 
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 
-public class Cards {
-    private int mana;
+public final class Cards {
+    private final int mana;
     private int attackDamage;
     private int health;
-    private String description;
-    private ArrayList<String> colors;
-    private String name;
+    private final String description;
+    private final ArrayList<String> colors;
+    private final String name;
 
     private boolean frozen = false;
     private boolean used = false;
 
     public Cards() {
-
+        mana = 0;
+        description = null;
+        colors = null;
+        name = null;
     }
-    public Cards(int mana, String description, ArrayList<String> colors, String name) {
+    public Cards(final int mana,
+                 final String description,
+                 final ArrayList<String> colors,
+                 final String name) {
         this.mana = mana;
         this.description = description;
         this.colors = colors;
         this.name = name;
     }
 
-    public Cards(int mana, int attackDamage, int health, String description, ArrayList<String> colors, String name) {
+    public Cards(final int mana,
+                 final int attackDamage,
+                 final  int health,
+                 final String description,
+                 final ArrayList<String> colors,
+                 final String name) {
         this.mana = mana;
         this.attackDamage = attackDamage;
         this.health = health;
@@ -34,7 +48,7 @@ public class Cards {
 
     //getters
 
-    public int getMana () {
+    public int getMana() {
         return this.mana;
     }
 
@@ -68,119 +82,130 @@ public class Cards {
 
     //setters
 
-    void setMana(int mana) {
-        this.mana = mana;
-    }
-
-    void setAttackDamage(int attackDamage) {
+    void setAttackDamage(final int attackDamage) {
         this.attackDamage = attackDamage;
     }
 
-    void setHealth(int health) {
+    void setHealth(final int health) {
         this.health = health;
     }
 
-    void setDescription(String description) {
-        this.description = description;
-    }
-
-    void setColors(ArrayList<String> colors) {
-        this.colors.addAll(colors);
-    }
-
-    void setName(String name) {
-        this.name = name;
-    }
-
-    void setFrozen(boolean frozen) {
+    void setFrozen(final boolean frozen) {
         this.frozen = frozen;
     }
 
-    void setUsed(boolean used) {
+    void setUsed(final boolean used) {
         this.used = used;
     }
 
     //action methods
 
-    public void ability(Cards minion) {
+    /**
+     * @param minion
+     */
+    public void ability(final Cards minion) {
         switch (this.name) {
-            case "The Ripper": {
+            case "The Ripper":
                 minion.setAttackDamage(minion.getAttackDamage() - 2);
-                if(minion.getAttackDamage() < 0)
+                if (minion.getAttackDamage() < 0) {
                     minion.setAttackDamage(0);
+                }
                 break;
-            }
-            case "Miraj": {
+
+            case "Miraj":
                 int copy = minion.getHealth();
                 minion.setHealth(this.getHealth());
                 this.setHealth(copy);
                 break;
-            }
-            case "The Cursed One": {
-                int copy = minion.getAttackDamage();
+
+            case "The Cursed One":
+                copy = minion.getAttackDamage();
                 minion.setAttackDamage(minion.getHealth());
                 minion.setHealth(copy);
                 break;
-            }
-            case "Disciple": {
+
+            case "Disciple":
                 minion.setHealth(minion.getHealth() + 2);
                 break;
-            }
+
+            default: break;
         }
     }
-    public void attack(Cards minion) {
+
+    /**
+     * @param minion
+     */
+    public void attack(final @NotNull Cards minion) {
         this.health = this.health - minion.attackDamage;
         minion.setUsed(true);
     }
 
-    public void effect(ArrayList<Cards> row, ArrayList<Cards> my_row) {
+    /**
+     * @param row
+     * @param myRow
+     */
+    public void effect(final ArrayList<Cards> row, final ArrayList<Cards> myRow) {
         switch (this.name) {
-            case "Firestorm": {
+            case "Firestorm":
                 for (Cards i : row) {
                     i.setHealth(i.getHealth() - 1);
                 }
                 int i = 0;
-                while(i != row.size()) {
-                    if(row.get(i).getHealth() <= 0)
+                while (i != row.size()) {
+                    if (row.get(i).getHealth() <= 0) {
                         row.remove(i);
-                    else i++;
-                }
-                break;
-            }
-            case "Winterfell": {
-                for (Cards i : row) {
-                    i.setFrozen(true);
-                }
-                break;
-            }
-            case "Heart Hound": {
-                int maxHealth = 0;
-                for (Cards i : row)
-                    if(i.getHealth() > maxHealth) {
-                        maxHealth = i.getHealth();
+                    } else {
+                        i++;
                     }
-                for(Cards i : row)
-                    if(i.getHealth() == maxHealth) {
-                        my_row.add(i);
-                        row.remove(i);
+                }
+                break;
+
+            case "Winterfell":
+                for (Cards j : row) {
+                    j.setFrozen(true);
+                }
+                break;
+
+            case "Heart Hound":
+                int maxHealth = 0;
+                for (Cards k : row) {
+                    if (k.getHealth() > maxHealth) {
+                        maxHealth = k.getHealth();
+                    }
+                }
+                for (Cards l : row) {
+                    if (l.getHealth() == maxHealth) {
+                        myRow.add(l);
+                        row.remove(l);
                         break;
                     }
+                }
                 break;
-            }
+
+            default: break;
         }
     }
 
+    @Contract(pure = true)
     @Override
-    public String toString() {
-        return "Cards{" +
-                " mana: " + this.mana +
-                " attackDamage: " + this.attackDamage +
-                " health: " + this.health +
-                " description: " + this.description +
-                " colors: " + this.colors +
-                " name: " + this.name +
-                " frozen: " + this.frozen +
-                " used: " + this.used +
-                " } ";
+    public @NotNull String toString() {
+        return "Cards{"
+                + " mana: "
+                + this.mana
+                + " attackDamage: "
+                + this.attackDamage
+                + " health: "
+                + this.health
+                + " description: "
+                + this.description
+                + " colors: "
+                + this.colors
+                + " name: "
+                + this.name
+                + " frozen: "
+                + this.frozen
+                + " used: "
+                + this.used
+                + " } ";
     }
 }
