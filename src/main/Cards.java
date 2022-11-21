@@ -1,7 +1,5 @@
 package main;
 
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
@@ -136,7 +134,7 @@ public final class Cards {
      * When a minion attacks, the attacked one loses life
      * @param minion for Card which attacked
      */
-    public void attack(final @NotNull Cards minion) {
+    public void attack(final  Cards minion) {
         this.health = this.health - minion.attackDamage;
         minion.setUsed(true);
     }
@@ -188,9 +186,8 @@ public final class Cards {
         }
     }
 
-    @Contract(pure = true)
     @Override
-    public @NotNull String toString() {
+    public String toString() {
         return "Cards{"
                 + " mana: "
                 + this.mana

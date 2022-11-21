@@ -1,7 +1,6 @@
 package main;
 
 import fileio.CardInput;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
@@ -12,7 +11,7 @@ public final class Deck {
      * @param otherDeck for the deck we want to copy
      * @return the copy of the received deck
      */
-    public @NotNull ArrayList<CardInput> chooseDeck(final @NotNull ArrayList<CardInput> otherDeck) {
+    public ArrayList<CardInput> chooseDeck(final ArrayList<CardInput> otherDeck) {
         ArrayList<CardInput> myDeck = new ArrayList<>();
         for (CardInput cardInput : otherDeck) {
             myDeck.add(cardInput);
@@ -25,7 +24,7 @@ public final class Deck {
      * @param player for the player we give the deck to
      * @param deck for the deck we give to the player
      */
-    public void setDecks(final Player player, final @NotNull ArrayList<CardInput> deck) {
+    public void setDecks(final Player player, final ArrayList<CardInput> deck) {
         for (CardInput cardInput : deck) {
             switch (cardInput.getName()) {
                 case "Sentinel":
