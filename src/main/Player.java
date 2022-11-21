@@ -20,7 +20,9 @@ public final class Player {
         this.mana = 0;
     }
 
-    //getters
+    /*
+    Getters
+     */
     public ArrayList<Cards> getDeck() {
         return this.deck;
     }
@@ -45,9 +47,12 @@ public final class Player {
         return this.frontRow;
     }
 
-    //seters
+    /*
+    Setters
+     */
 
     /**
+     * Method for when players come and take their places
      * @param frontRow
      * @param backRow
      */
@@ -57,6 +62,7 @@ public final class Player {
     }
 
     /**
+     * Method for when we give the hero to a player
      * @param hero
      */
     //setters
@@ -73,13 +79,15 @@ public final class Player {
     }
 
     /**
-     * @param card
+     * Method for when a player uses a card
+     * @param card for the card the player uses
      */
     public void changeMana(final Cards card) {
         this.mana = this.mana - card.getMana();
     }
 
     /**
+     * Method for when player uses hero
      * @param hero
      */
     public void changeMana(final Hero hero) {
@@ -87,6 +95,7 @@ public final class Player {
     }
 
     /**
+     * Method for when a new round starts
      * @param mana
      */
     public void changeMana(final int mana) {
@@ -97,6 +106,7 @@ public final class Player {
     // action methods
 
     /**
+     * Method for when a player takes a card from deck
      */
     public void addCardInHand() {
         if (this.deck.size() != 0) {
@@ -106,10 +116,11 @@ public final class Player {
     }
 
     /**
-     * @param mapper
-     * @param command
-     * @param playerIdk
-     * @return
+     * Method for when we need to do debugging for player
+     * @param mapper for the object mapper we use to create ObjectNodes and ArrayNodes
+     * @param command for the action we tried to do
+     * @param playerIdk for the current player
+     * @return the ObjectNode we have to print
      */
     public ObjectNode command(final ObjectMapper mapper,
                               final String command,

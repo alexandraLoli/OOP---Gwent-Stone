@@ -5,8 +5,9 @@ import java.util.ArrayList;
 public final class UsefulClass {
 
     /**
-     * @param error
-     * @return
+     * Method to get the message for an error
+     * @param error for the error we got
+     * @return the message
      */
     public String generateString(final String error) {
         //doesn't work??
@@ -64,6 +65,7 @@ public final class UsefulClass {
     }
 
     /**
+     * Method that verify if a card is in a row
      * @param row
      * @param card
      * @return
@@ -78,6 +80,7 @@ public final class UsefulClass {
     }
 
     /**
+     * Method that verify if a row has a Tank card
      * @param row1
      * @param row2
      * @return
@@ -98,6 +101,7 @@ public final class UsefulClass {
     }
 
     /**
+     * Method that verify if a card is Tank
      * @param card
      * @return
      */

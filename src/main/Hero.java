@@ -30,7 +30,9 @@ public final class Hero {
         this.health = 30;
     }
 
-    //getters
+    /*
+    Getter
+     */
 
     public int getMana() {
         return this.mana;
@@ -56,7 +58,9 @@ public final class Hero {
         return this.used;
     }
 
-    //setters
+    /*
+    Setters
+     */
 
     void setHealth(final int attackDamage) {
         this.health = this.health - attackDamage;
@@ -69,7 +73,8 @@ public final class Hero {
     //action methods
 
     /**
-     * @param row
+     * Method for when a hero uses its effect
+     * @param row for attacked row
      */
     public void heroEffect(final ArrayList<Cards> row) {
         switch (this.name) {

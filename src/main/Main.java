@@ -76,28 +76,29 @@ public final class Main {
 
         //TODO add here the entry point to your implementation
 
-        System.out.println("NEW GAAAMEEEE");
-
         Error error = new Error();
 
         int gamesPlayed = 0;
         int player1Wins = 0;
         int player2Wins = 0;
 
+        /* The game is on! */
         for (GameInput gameInput : inputData.getGames()) {
 
+            /* Players come and take their sits */
             Player player1 = new Player();
             Player player2 = new Player();
             player1.setRows(2, 2 + 1);
             player2.setRows(1, 0);
 
+            /* We set the table */
             GameTable gameTable = new GameTable();
 
-            // the games start
+            /* The  game starts */
             StartGameInput startGameInput = gameInput.getStartGame();
             Deck deck = new Deck();
 
-            // the players choose a deck
+            /* Each player chooses a deck */
             ArrayList<CardInput> copy = inputData
                     .getPlayerOneDecks()
                     .getDecks()
@@ -111,30 +112,26 @@ public final class Main {
                             .getPlayerTwoDeckIdx());
             ArrayList<CardInput> my2Deck = deck.chooseDeck(copy);
 
-
-            // we shuffle the cards in deck
+            /* We shuffle the cards in deck */
             int shuffleSeed = startGameInput.getShuffleSeed();
             Random random1 = new Random(shuffleSeed);
             Random random2 = new Random(shuffleSeed);
             Collections.shuffle(my1Deck, random1);
             Collections.shuffle(my2Deck, random2);
 
-            System.out.println(my1Deck);
-            System.out.println(my2Deck);
-
-            // we give the decks to players
+            /* We give the decks to players */
             deck.setDecks(player1, my1Deck);
             deck.setDecks(player2, my2Deck);
 
-            // we give the hero to the players
+            /* We give the hero cards to players */
             player1.setHero(startGameInput.getPlayerOneHero());
             player2.setHero(startGameInput.getPlayerTwoHero());
 
-            // we choose a player to start the game
+            /* We choose a player to start the game */
             int startingPlayer = startGameInput.getStartingPlayer();
             gameTable.setCurrentPlayer(startingPlayer);
 
-            // now the game starts for real!
+            /* Now the game starts for real! */
             int newRound = 0;
             int counterMana = 1;
 
@@ -145,7 +142,7 @@ public final class Main {
 
             for (ActionsInput action : gameInput.getActions()) {
 
-                //do we start a new round?
+                /* Do we start a new round? */
                 if (newRound == 0) {
                     player2.addCardInHand();
                     player1.addCardInHand();
@@ -157,9 +154,11 @@ public final class Main {
                     }
                     newRound++;
                 }
+
+                /* We check the commands */
                 switch (action.getCommand()) {
 
-                    //commands for debug
+                    /* Commands for debuging */
                     case "getCardsInHand" :
                     case "getPlayerDeck" :
                     case "getEnvironmentCardsInHand" :
@@ -255,7 +254,7 @@ public final class Main {
                         break;
 
 
-                    //commands for statistics
+                    /* Commands for statistics */
                     case "getTotalGamesPlayed" :
                         object = objectMapper.createObjectNode();
                         objectNode.add(object);
@@ -284,7 +283,7 @@ public final class Main {
                         break;
 
 
-                    //commands for actions
+                    /* Commands for actions */
                     case "endPlayerTurn" :
                         if (gameTable.getCurrentPlayer() == 1) {
                             gameTable.unfrozeCards(player1);

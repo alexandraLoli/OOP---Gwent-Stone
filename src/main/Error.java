@@ -12,11 +12,12 @@ public final class Error {
     }
 
     /**
-     * @param command
-     * @param handIdx
-     * @param error
-     * @param mapper
-     * @return
+     * Method for printing error output
+     * @param command for the action we tried to do
+     * @param handIdx for the card the player tried to place on table
+     * @param error for the error we got
+     * @param mapper for the object mapper we use to create ObjectNodes and ArrayNodes
+     * @return the ObjectNode we have to print
      */
     public ObjectNode errorPlaceCard(final String command,
                                      final int handIdx,
@@ -34,14 +35,15 @@ public final class Error {
     }
 
     /**
-     * @param command
-     * @param xEr
-     * @param yEr
-     * @param xEd
-     * @param yEd
-     * @param error
-     * @param mapper
-     * @return
+     * Method for printing error output
+     * @param command for the action we tried to do
+     * @param xEr for x index of attacker's card
+     * @param yEr for y index of attacker's card
+     * @param xEd for x index of attacked player's card
+     * @param yEd for y index of attacked player's card
+     * @param error for the error we got
+     * @param mapper for the object mapper we use to create ObjectNodes and ArrayNodes
+     * @return the ObjectNode we have to print
      */
     public ObjectNode errorCardUsesAttack(final String command,
                                           final int xEr,
@@ -71,12 +73,13 @@ public final class Error {
     }
 
     /**
-     * @param command
-     * @param idx
-     * @param row
-     * @param error
-     * @param mapper
-     * @return
+     * Method for printing error output
+     * @param command for the action we tried to do
+     * @param idx for the Environment card the playe used
+     * @param row for attacked row
+     * @param error for the error we got
+     * @param mapper for the object mapper we use to create ObjectNodes and ArrayNodes
+     * @return the ObjectNode we have to print
      */
     public ObjectNode errorUsesEnvironmentCard(final String command,
                                                final int idx,
@@ -98,14 +101,15 @@ public final class Error {
     }
 
     /**
-     * @param command
+     * Method for printing error output
+     * @param command for the action we tried to do
      * @param xEr
      * @param yEr
      * @param xEd
      * @param yEd
-     * @param error
-     * @param mapper
-     * @return
+     * @param error for the error we got
+     * @param mapper for the object mapper we use to create ObjectNodes and ArrayNodes
+     * @return the ObjectNode we have to print
      */
     public ObjectNode errorCardUsesAbility(final String command,
                                            final int xEr,
@@ -135,12 +139,13 @@ public final class Error {
     }
 
     /**
-     * @param command
-     * @param xEr
-     * @param yEr
-     * @param error
-     * @param mapper
-     * @return
+     * Method for printing error output
+     * @param command for the action we tried to do
+     * @param xEr for x index of attacker's card
+     * @param yEr for y index of attacker's card
+     * @param error for the error we got
+     * @param mapper for the object mapper we use to create ObjectNodes and ArrayNodes
+     * @return the ObjectNode we have to print
      */
     public ObjectNode errorAttackHero(final String command,
                                       final int xEr,
@@ -163,11 +168,12 @@ public final class Error {
     }
 
     /**
-     * @param command
-     * @param row
-     * @param error
-     * @param mapper
-     * @return
+     * Method for printing error output
+     * @param command for the action we tried to do
+     * @param row for the row the player attacked
+     * @param error for the error we got
+     * @param mapper for the object mapper we use to create ObjectNodes and ArrayNodes
+     * @return the ObjectNode we have to print
      */
     public ObjectNode errorHeroAttack(final String command,
                                       final int row,

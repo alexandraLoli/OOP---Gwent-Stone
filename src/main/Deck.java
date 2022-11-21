@@ -8,8 +8,9 @@ import java.util.ArrayList;
 public final class Deck {
 
     /**
-     * @param otherDeck
-     * @return
+     * Method for copying cards in our deck
+     * @param otherDeck for the deck we want to copy
+     * @return the copy of the received deck
      */
     public @NotNull ArrayList<CardInput> chooseDeck(final @NotNull ArrayList<CardInput> otherDeck) {
         ArrayList<CardInput> myDeck = new ArrayList<>();
@@ -20,8 +21,9 @@ public final class Deck {
     }
 
     /**
-     * @param player
-     * @param deck
+     * Method used when we give the deck to a player
+     * @param player for the player we give the deck to
+     * @param deck for the deck we give to the player
      */
     public void setDecks(final Player player, final @NotNull ArrayList<CardInput> deck) {
         for (CardInput cardInput : deck) {

@@ -20,7 +20,9 @@ public final class GameTable {
     private int currentPlayer;
     private UsefulClass usefulClass = new UsefulClass();
 
-    //getters
+    /*
+    Getters
+     */
 
     public UsefulClass getUsefulClass() {
         return this.usefulClass;
@@ -34,7 +36,8 @@ public final class GameTable {
     }
 
     /**
-     * @param index
+     * Method used when it's other's player's turn
+     * @param index for current player
      */
     //setters
     public void changeCurrentPlayer(final int index) {
@@ -50,9 +53,10 @@ public final class GameTable {
     }
 
     /**
-     * @param card
-     * @param player
-     * @return
+     * Method used when the player places a card on table
+     * @param card for the card the player want to place
+     * @param player for the player who places the card
+     * @return error or succes message
      */
     public String placeCardOnTable(final Cards card, final Player player) {
         if (card.getName().equals("Firestorm")
@@ -98,7 +102,7 @@ public final class GameTable {
     }
 
     /**
-     * @param player
+     * @param player for the player whose turn ended
      */
     public void unfrozeCards(final Player player) {
         for (Cards i : this.rows.get(player.getBackRow())) {
@@ -115,7 +119,7 @@ public final class GameTable {
     }
 
     /**
-     * @param player
+     * @param player for the player whose turn ended
      */
     public void unuseCards(final Player player) {
         for (Cards i : this.rows.get(player.getBackRow())) {
@@ -132,8 +136,8 @@ public final class GameTable {
     }
 
     /**
-     * @param mapper
-     * @return
+     * @param mapper for the object mapper we use to create ObjectNodes and ArrayNodes
+     * @return error or succes message
      */
     public ObjectNode getCardsOnTable(final ObjectMapper mapper) {
         ObjectNode objectNode = mapper.createObjectNode();
@@ -195,13 +199,13 @@ public final class GameTable {
     }
 
     /**
-     * @param player1
-     * @param player2
-     * @param xAttacker
-     * @param yAttacker
-     * @param xAttacked
-     * @param yAttacked
-     * @return
+     * @param player1 for the attacker
+     * @param player2 for the attacked
+     * @param xAttacker for x index of attacker's card
+     * @param yAttacker for y index of attacker's card
+     * @param xAttacked for x index of attacked player's card
+     * @param yAttacked for y index of attacked player's card
+     * @return error or succes message
      */
     public String cardUsesAttack(final Player player1,
                                  final Player player2,
@@ -250,9 +254,9 @@ public final class GameTable {
     }
 
     /**
-     * @param x
-     * @param y
-     * @return
+     * @param x for x index of card
+     * @param y for y index of card
+     * @return error or succes message
      */
     public String getCardAtPosition(final int x, final int y) {
         if (this.rows.get(x).size() < y + 1) {
@@ -263,11 +267,11 @@ public final class GameTable {
     }
 
     /**
-     * @param player1
-     * @param player2
-     * @param card
-     * @param row
-     * @return
+     * @param player1 for attacker player
+     * @param player2 for attacked player
+     * @param card for card which attacks
+     * @param row for the attacked row
+     * @return error or succes message
      */
     public String cardUsesEffect(final Player player1,
                                  final Player player2,
@@ -314,8 +318,9 @@ public final class GameTable {
     }
 
     /**
-     * @param mapper
-     * @return
+     * Method which gets the frozen Cards on Table
+     * @param mapper for the object mapper we use to create ObjectNodes and ArrayNodes
+     * @return error or succes message
      */
     public ObjectNode getFrozenCardsOnTable(final ObjectMapper mapper) {
         ObjectNode objectNode = mapper.createObjectNode();
@@ -377,11 +382,11 @@ public final class GameTable {
     }
 
     /**
-     * @param player1
-     * @param player2
+     * @param player1 for attacker
+     * @param player2 for attacker player
      * @param cardAttacker
      * @param cardAttacked
-     * @return
+     * @return error or succes message
      */
     public String cardUsesAbility(final Player player1,
                                   final Player player2,
@@ -453,11 +458,11 @@ public final class GameTable {
     }
 
     /**
-     * @param player1
-     * @param player2
-     * @param card
-     * @param hero
-     * @return
+     * @param player1 for attacker
+     * @param player2 for attacked player
+     * @param card for attacker card
+     * @param hero for attacked hero
+     * @return error or succes message
      */
     public String cardAttackHero(final Player player1,
                                  final Player player2,
@@ -481,10 +486,10 @@ public final class GameTable {
     }
 
     /**
-     * @param row
-     * @param hero
-     * @param player1
-     * @return
+     * @param row for attacked row
+     * @param hero for attacker hero
+     * @param player1 for the player who has the hero
+     * @return error or succes message
      */
     public String heroUseAbility(final int row,
                                  final Hero hero,

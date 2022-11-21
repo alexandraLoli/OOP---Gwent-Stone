@@ -133,7 +133,8 @@ public final class Cards {
     }
 
     /**
-     * @param minion
+     * When a minion attacks, the attacked one loses life
+     * @param minion for Card which attacked
      */
     public void attack(final @NotNull Cards minion) {
         this.health = this.health - minion.attackDamage;
@@ -141,8 +142,9 @@ public final class Cards {
     }
 
     /**
-     * @param row
-     * @param myRow
+     * Environment card uses effect
+     * @param row for the attacked row
+     * @param myRow for the attacker's row
      */
     public void effect(final ArrayList<Cards> row, final ArrayList<Cards> myRow) {
         switch (this.name) {
